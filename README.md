@@ -1,5 +1,6 @@
 # literature_survey
-A Python package to search google scholar for a given query and downloads all relevant .pdf files
+A Python web scraping package to search Google Scholar for a given query, download .pdf files and organize them. 
+
 
 ## Prerequisites
 ``` selenium ```
