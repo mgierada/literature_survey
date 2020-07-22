@@ -18,10 +18,14 @@ class LiteratureSurvay():
 
     def run(self):
         ''' Main run method '''
-        LiteratureSurvay.search(self)
-        links = LiteratureSurvay.get_links(self)
-        np = LiteratureSurvay.get_next_pages(self)
-        print(np)
+        # LiteratureSurvay.search(self)
+        # links = LiteratureSurvay.get_links(self)
+        # np = LiteratureSurvay.get_next_pages(self)
+        # print(np)
+        link_to_paper = 'https://onlinelibrary.wiley.com/doi/full/10.1002/jcc.25871'
+        # doi = LiteratureSurvay.get_doi_wiley(self, link_to_paper)
+        doi = 'https://doi.org/10.1002/jcc.25871'
+        LiteratureSurvay.get_pdf(self, doi)
 
     def search(self):
         ''' Click on the first .pdf file to open it '''
@@ -63,6 +67,21 @@ class LiteratureSurvay():
         for link in links:
             all_links.append(link.get_attribute('href'))
         return all_links
+
+    def get_doi_wiley(self, link_to_paper):
+        ''' Return DOI of the articles published by Wiley '''
+        # open page with the article
+        self.driver.get(link_to_paper)
+        element = self.driver.find_element_by_class_name('epub-doi')
+        doi = element.get_attribute('href')
+        return doi
+
+    def get_pdf(self, doi):
+        self.driver.get('https://sci-hub.tw/' + doi)
+        element = self.driver.find_element_by_id('buttons')
+        for el in element.find_elements_by_xpath(
+                ".//a"):
+            el.click()
 
 
 query = 'automation surface reaction mechanism workflow'
