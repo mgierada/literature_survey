@@ -8,7 +8,7 @@ class LiteratureSurvay():
         ''' Initialize class '''
         options = webdriver.ChromeOptions()
         options.add_argument('--ignore-certificate-errors')
-        # options.add_argument('headless')
+        options.add_argument('headless')
         options.add_argument('--test-type')
         DRIVER_PATH = './chromedriver'
 
@@ -20,8 +20,8 @@ class LiteratureSurvay():
         ''' Main run method '''
         LiteratureSurvay.search(self)
         links = LiteratureSurvay.get_links(self)
-        # print(links)
-        LiteratureSurvay.next_page(self)
+        np = LiteratureSurvay.get_next_pages(self)
+        print(np)
 
     def search(self):
         ''' Click on the first .pdf file to open it '''
@@ -33,15 +33,21 @@ class LiteratureSurvay():
         # click the first link with pdf
         # self.driver.find_element_by_class_name('gs_or_ggsm').click()
 
-    def next_page(self):
+    def get_next_pages(self):
+        ''' Get a list with links to Google Scholar pages 2-9 
+
+        Return:
+        _______
+        next_pages : list(str)
+            a list with Google Scholar pages 1-9
+
+        '''
+        next_pages = []
         element = self.driver.find_element_by_id('gs_nml')
-        # print(element.find_element_by_xpath(
-        #     ".//a[@class='gs_nma']").get_attribute('href'))
-        new = []
         for el in element.find_elements_by_xpath(
                 ".//a[@class='gs_nma']"):
-            print(el.get_attribute('href'))
-        # print(page.get_attribute('href'))
+            next_pages.append(el.get_attribute('href'))
+        return next_pages
 
     def get_links(self):
         ''' Get all links to the research papers 
