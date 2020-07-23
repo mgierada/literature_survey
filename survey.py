@@ -2,7 +2,17 @@ from selenium import webdriver
 
 
 class LiteratureSurvay():
-    ''' A class for scraping Google Scholar for a given query '''
+    ''' A class for scraping Google Scholar for a given query 
+
+    Usage:
+    ______
+
+    >>> query = 'put_your_query_here'
+    e.g. query = 'Cr silica dft mechanism'
+    >>> ls = LiteratureSurvay(query)
+    >>> ls.run()
+
+    '''
 
     def __init__(self, query):
         ''' Initialize the class with the user defined options
