@@ -94,12 +94,14 @@ class LiteratureSurvay():
     def get_dois(self, links_to_papers):
         ''' Get DOIs of papers from links to the papers
 
-        For many articles doi can be successfully composed from link to the paper
-        e.g. https://onlinelibrary.wiley.com/doi/abs/10.1002/jcc.25871
-        Fragment '10.1002/jcc.25871' is good enough for SciHub
-
         Parameters:
         __________
+        links_to_papers : list(str)
+            a list of links to the original papers
+
+        For many articles doi can be successfully composed from link to the paper
+        e.g. https://onlinelibrary.wiley.com/doi/abs/10.1002/jcc.25871
+        Fragment '10.1002/jcc.25871' is good enough for SciHub.
 
         '''
         dois = []
