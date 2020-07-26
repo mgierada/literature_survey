@@ -38,6 +38,16 @@ class LiteratureSurvay():
         ''' Main run method '''
         # search Google Scholar for a given query
         self.search()
+        # get links to papers, convert to dois and download pdfs
+        # for a given search page
+        self.run_page()
+        next_pages = self.get_next_pages()
+        # open next page and do everything to download pdfs
+        for page in next_pages:
+            self.driver.get(page)
+            self.run_page()
+
+    def run_page(self):
         # get links to all papers on the 1st page
         links_to_papers = self.get_links_to_papers()
         # convert these links to doi
