@@ -35,17 +35,19 @@ class LiteratureSurvay():
 
     def run(self):
         ''' Main run method '''
-        # LiteratureSurvay.search(self)
-        # links = LiteratureSurvay.get_links(self)
+        LiteratureSurvay.search(self)
+        links_to_papers = LiteratureSurvay.get_links_to_papers(self)
+        dois = self.get_dois(links_to_papers)
+        print(dois)
         # np = LiteratureSurvay.get_next_pages(self)
         # print(np)
-        link_to_paper = 'https://onlinelibrary.wiley.com/doi/full/10.1002/jcc.25871'
+        # link_to_paper = 'https://onlinelibrary.wiley.com/doi/full/10.1002/jcc.25871'
         # doi = LiteratureSurvay.get_doi_wiley(self, link_to_paper)
-        doi = 'https://doi.org/10.1002/jcc.25871'
-        LiteratureSurvay.get_pdf(self, doi)
+        # doi = 'https://doi.org/10.1002/jcc.25871'
+        # LiteratureSurvay.get_pdf(self, doi)
 
     def search(self):
-        ''' Searching Google Scholar for a give query '''
+        ''' Searching Google Scholar for a given query '''
         self.driver.get('https://scholar.google.com')
         # find search box and enter query
         self.driver.find_element_by_name('q').send_keys(query)
@@ -55,7 +57,7 @@ class LiteratureSurvay():
         # self.driver.find_element_by_class_name('gs_or_ggsm').click()
 
     def get_next_pages(self):
-        ''' Get a list with links to Google Scholar pages 2-9 
+        ''' Get a list with links_to_papers to Google Scholar pages 2-9 
 
         Return:
         _______
@@ -66,28 +68,46 @@ class LiteratureSurvay():
         next_pages = []
         # find id of the page changing bar
         element = self.driver.find_element_by_id('gs_nml')
-        # get links to all pages 2-9
+        # get links_to_papers to all pages 2-9
         for el in element.find_elements_by_xpath(
                 ".//a[@class='gs_nma']"):
             next_pages.append(el.get_attribute('href'))
         return next_pages
 
     def get_links_to_papers(self):
-        ''' Get all links to the research papers 
+        ''' Get all links_to_papers to the research papers 
 
         Returns:
         _______
         all_links_to_papers : list(str)
-            a list with links to papers
+            a list with links_to_papers to papers
 
         '''
         all_links_to_papers = []
-        # find class name handling links to the articles
-        links = self.driver.find_elements_by_class_name('gs_rt a')
-        # loop through all elements of that class and get links to research articles
-        for link in links:
+        # find class name handling links_to_papers to the articles
+        links_to_papers = self.driver.find_elements_by_class_name('gs_rt a')
+        # loop through all elements of that class and get links_to_papers to research articles
+        for link in links_to_papers:
             all_links_to_papers.append(link.get_attribute('href'))
         return all_links_to_papers
+
+    def get_dois(self, links_to_papers):
+        ''' Get DOIs of papers from links to the papers
+
+        For many articles doi can be successfully composed from link to the paper
+        e.g. https://onlinelibrary.wiley.com/doi/abs/10.1002/jcc.25871
+        Fragment '10.1002/jcc.25871' is good enough for SciHub
+
+        Parameters:
+        __________
+
+        '''
+        dois = []
+        for links_to_paper in links_to_papers:
+            create_doi = links_to_paper.split('/')[-2:]
+            doi = create_doi[0] + '/' + create_doi[1]
+            dois.append(doi)
+        return dois
 
     def get_doi_wiley(self, link_to_paper):
         ''' Return DOI of the articles published by Wiley 
