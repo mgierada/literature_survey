@@ -37,13 +37,17 @@ class LiteratureSurvay():
     def run(self):
         ''' Main run method '''
         # search Google Scholar for a given query
+        print('Searching for a query {}'.format(self.query))
         self.search()
         # get links to papers, convert to dois and download pdfs
         # for a given search page
+        print('Page: 1')
         self.run_page()
         next_pages = self.get_next_pages()
         # open next page and do everything to download pdfs
-        for page in next_pages:
+        for i, page in enumerate(next_pages):
+            page_number = i + 2
+            print('Page: {}'.format(page_number))
             self.driver.get(page)
             self.run_page()
 
@@ -54,18 +58,13 @@ class LiteratureSurvay():
         dois = self.get_dois(links_to_papers)
         # download pdf files
         for doi in dois:
+            print('Getting .pdf file for {}'.format(doi))
             try:
                 self.get_pdf(doi)
+                print('Done!')
             except NoSuchElementException as exception:
                 print('Cannot download {}. Check doi'.format(doi))
                 pass
-
-        # np = LiteratureSurvay.get_next_pages(self)
-        # print(np)
-        # link_to_paper = 'https://onlinelibrary.wiley.com/doi/full/10.1002/jcc.25871'
-        # doi = LiteratureSurvay.get_doi_wiley(self, link_to_paper)
-        # doi = 'https://doi.org/10.1002/jcc.25871'
-        # LiteratureSurvay.get_pdf(self, doi)
 
     def search(self):
         ''' Searching Google Scholar for a given query '''
