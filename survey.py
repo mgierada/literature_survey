@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 
 
 class LiteratureSurvay():
@@ -35,10 +36,20 @@ class LiteratureSurvay():
 
     def run(self):
         ''' Main run method '''
-        LiteratureSurvay.search(self)
-        links_to_papers = LiteratureSurvay.get_links_to_papers(self)
+        # search Google Scholar for a given query
+        self.search()
+        # get links to all papers on the 1st page
+        links_to_papers = self.get_links_to_papers()
+        # convert these links to doi
         dois = self.get_dois(links_to_papers)
-        print(dois)
+        # download pdf files
+        for doi in dois:
+            try:
+                self.get_pdf(doi)
+            except NoSuchElementException as exception:
+                print('Cannot download {}. Check doi'.format(doi))
+                pass
+
         # np = LiteratureSurvay.get_next_pages(self)
         # print(np)
         # link_to_paper = 'https://onlinelibrary.wiley.com/doi/full/10.1002/jcc.25871'
