@@ -1,10 +1,13 @@
 # Literature_survey
 
-A Python web scraping package to search Google Scholar for a given query, download .pdf files and organize them.
+A Python code to automate literature survey.
+
+We all know that doing a literature survey is a daunting task, often taking a lot of time. This code aims to speed up this process. It searches Google Scholar for a given query, download .pdf files and organize them. With this code you can do your initial literature search in seconds.
 
 ## Prerequisites
 
-`selenium`
+Python : `selenium`
+Browser: `chromedriver` is using Google Chrome. If you need support for other browsers, feel free to contact me.
 
 ## How to install
 
@@ -12,7 +15,10 @@ A Python web scraping package to search Google Scholar for a given query, downlo
 
 ## How to run
 
+Run the following python script
+
 ```python
+#!/usr/bin/env python3
 query = 'research chemistry physics'
 ls = LiteratureSurvay(query)
 ls.run()
