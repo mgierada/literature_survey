@@ -35,7 +35,7 @@ class LiteratureSurvay():
             executable_path=DRIVER_PATH, options=options)
 
     def run(self):
-        ''' Main run method '''
+        ''' Main method to run the workflow '''
         # search Google Scholar for a given query
         print('Searching for a query {}'.format(self.query))
         self.search()
@@ -44,16 +44,17 @@ class LiteratureSurvay():
         print('Page: 1')
         # self.run_page()
         next_pages = self.get_next_pages()
-        # open next page and do everything to download pdfs
+        # open next page and do everything to download .pdf files
         for i, page in enumerate(next_pages):
-            page_number = i + 2
-            print('Page: {}'.format(page_number))
-            try:
-                self.driver.get(page)
-                self.run_page()
-            except InvalidArgumentException:
-                print('error')
-                pass
+            if page is not None:
+                page_number = i + 1
+                print('Page: {}'.format(page_number))
+                try:
+                    self.driver.get(page)
+                    self.run_page()
+                except InvalidArgumentException:
+                    print('error')
+                    pass
 
     def run_page(self):
         # get links to all papers on the 1st page
