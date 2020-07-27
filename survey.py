@@ -42,21 +42,25 @@ class LiteratureSurvay():
         # get links to papers, convert to dois and download pdfs
         # for a given search page
         print('Page: 1')
-        # self.run_page()
+        self.run_page()
         next_pages = self.get_next_pages()
         # open next page and do everything to download .pdf files
         for i, page in enumerate(next_pages):
+            # check validity of the links
             if page is not None:
                 page_number = i + 1
                 print('Page: {}'.format(page_number))
                 try:
                     self.driver.get(page)
                     self.run_page()
+                # if the links are inalid, handle the error
                 except InvalidArgumentException:
                     print('error')
                     pass
 
     def run_page(self):
+        ''' For a given Google Scholar search page, get links to the papers,
+        transforms it to DOI and use SciHub to download .pdf files'''
         # get links to all papers on the 1st page
         links_to_papers = self.get_links_to_papers()
         # convert these links to doi
@@ -78,8 +82,6 @@ class LiteratureSurvay():
         self.driver.find_element_by_name('q').send_keys(query)
         # click find button
         self.driver.find_element_by_id('gs_hdr_tsb').click()
-        # click the first link with pdf
-        # self.driver.find_element_by_class_name('gs_or_ggsm').click()
 
     def get_next_pages(self):
         ''' Get a list with links_to_papers to Google Scholar pages 2-9
@@ -94,8 +96,6 @@ class LiteratureSurvay():
         # find id of the page changing bar
         element = self.driver.find_element_by_id('gs_nml')
         # get links_to_papers to all pages 2-9
-        # for el in element.find_elements_by_xpath(
-        #         ".//a[@class='gs_nma']"):
         for el in self.driver.find_elements_by_class_name('gs_nma'):
             next_pages.append(el.get_attribute('href'))
         return next_pages
@@ -193,9 +193,6 @@ class LiteratureSurvay():
         element.find_elements_by_xpath(".//a")
 
 
-query = 'automation surface reaction mechanism workflow'
+query = 'reaction mechanism dft chromium silica'
 ls = LiteratureSurvay(query)
 ls.run()
-# nextpages = ls.get_next_pages()
-# print(nextpages)
-# ls.click_next_page()
