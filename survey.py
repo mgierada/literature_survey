@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException, InvalidArgumentException
 
 
-class LiteratureSurvay():
+class LiteratureSurvey():
     ''' A class for scraping Google Scholar for a given query
 
     Usage:
@@ -194,5 +194,5 @@ class LiteratureSurvay():
 
 
 query = 'reaction mechanism dft chromium silica'
-ls = LiteratureSurvay(query)
+ls = LiteratureSurvey(query)
 ls.run()
