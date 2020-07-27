@@ -1,9 +1,9 @@
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException, InvalidArgumentException
 
 
 class LiteratureSurvay():
-    ''' A class for scraping Google Scholar for a given query 
+    ''' A class for scraping Google Scholar for a given query
 
     Usage:
     ______
@@ -42,14 +42,18 @@ class LiteratureSurvay():
         # get links to papers, convert to dois and download pdfs
         # for a given search page
         print('Page: 1')
-        self.run_page()
+        # self.run_page()
         next_pages = self.get_next_pages()
         # open next page and do everything to download pdfs
         for i, page in enumerate(next_pages):
             page_number = i + 2
             print('Page: {}'.format(page_number))
-            self.driver.get(page)
-            self.run_page()
+            try:
+                self.driver.get(page)
+                self.run_page()
+            except InvalidArgumentException:
+                print('error')
+                pass
 
     def run_page(self):
         # get links to all papers on the 1st page
@@ -77,7 +81,7 @@ class LiteratureSurvay():
         # self.driver.find_element_by_class_name('gs_or_ggsm').click()
 
     def get_next_pages(self):
-        ''' Get a list with links_to_papers to Google Scholar pages 2-9 
+        ''' Get a list with links_to_papers to Google Scholar pages 2-9
 
         Return:
         _______
@@ -89,13 +93,32 @@ class LiteratureSurvay():
         # find id of the page changing bar
         element = self.driver.find_element_by_id('gs_nml')
         # get links_to_papers to all pages 2-9
-        for el in element.find_elements_by_xpath(
-                ".//a[@class='gs_nma']"):
+        # for el in element.find_elements_by_xpath(
+        #         ".//a[@class='gs_nma']"):
+        for el in self.driver.find_elements_by_class_name('gs_nma'):
             next_pages.append(el.get_attribute('href'))
         return next_pages
 
+    # def click_next_page(self):
+    #     self.driver.get(
+    #         'https://scholar.google.pl/scholar?hl=en&as_sdt=0%2C5&q=surface&btnG=')
+    #     element = self.driver.find_element_by_id('gs_nm')
+    #     button_list = []
+    #     for el in element.find_elements_by_xpath('./button'):
+    #         button_list.append(el)
+    #     for button in button_list:
+    #         try:
+    #             button.click()
+    #         except ElementNotInteractableException:
+    #             print('sth wrong')
+    #             pass
+
+        # for el in element.find_elements_by_xpath(
+        #         ".//button[@class='gs_btnPR gs_in_ib gs_btn_lrge gs_btn_half gs_btn_lsu']"):
+        #     print(el)
+
     def get_links_to_papers(self):
-        ''' Get all links_to_papers to the research papers 
+        ''' Get all links_to_papers to the research papers
 
         Returns:
         _______
@@ -132,7 +155,7 @@ class LiteratureSurvay():
         return dois
 
     def get_doi_wiley(self, link_to_paper):
-        ''' Return DOI of the articles published by Wiley 
+        ''' Return DOI of the articles published by Wiley
 
         Parameters:
         ___________
@@ -172,3 +195,6 @@ class LiteratureSurvay():
 query = 'automation surface reaction mechanism workflow'
 ls = LiteratureSurvay(query)
 ls.run()
+# nextpages = ls.get_next_pages()
+# print(nextpages)
+# ls.click_next_page()
