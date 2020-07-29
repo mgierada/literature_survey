@@ -1,4 +1,4 @@
-# Literature_survey
+# Literature Survey
 
 A Python code to automate literature survey.
 
